@@ -1,0 +1,207 @@
+Id	Title	Director	Year	Length_minutes
+1	Toy Story	John Lasseter	1995	81
+2	A Bug's Life	John Lasseter	1998	95
+3	Toy Story 2	John Lasseter	1999	93
+4	Monsters, Inc.	Pete Docter	2001	92
+5	Finding Nemo	Andrew Stanton	2003	107
+6	The Incredibles	Brad Bird	2004	116
+7	Cars	John Lasseter	2006	117
+8	Ratatouille	Brad Bird	2007	115
+9	WALL-E	Andrew Stanton	2008	104
+10	Up	Pete Docter	2009	101
+11	Toy Story 3	Lee Unkrich	2010	103
+12	Cars 2	John Lasseter	2011	120
+13	Brave	Brenda Chapman	2012	102
+14	Monsters University	Dan Scanlon	2013	110
+
+
+Exercise 1 — Tasks                                                           Solutions:
+                                                                              
+1.Find the title of each film                                         (  select title from movies; )
+2.Find the director of each film                                      ( select director from movies; )
+3.Find the title and director of each film                            ( select title,director from movies; )
+4.Find the title and year of each film                                ( select title,year from movies;  )
+5.Find all the information about each film                            ( select * from movies; )
+
+Exercise 2 — Tasks
+
+1.Find the movie with a row id of 6                                   ( SELECT * FROM movies where id = 6; )
+2.Find the movies released in the years between 2000 and 2010         ( SELECT * FROM movies where year  between 2000 and 2010;)
+3. Find the movies not released in the years between                  ( SELECT title, year FROM movies
+WHERE year not between 2000 and 2010;)
+   2000 and  2010                                                          or   ( select title,year from movies
+where year < 2000 or year > 2010; )
+4.Find the first 5 Pixar movies and their release year                (  select title, year from movies where year <= 2003;  )
+
+Exercise 3 — Tasks
+
+1.Find all the Toy Story movies                                         ( SELECT * FROM movies where title like 'toy story%' )
+2.Find all the movies directed by John Lasseter                         ( SELECT * FROM movies where director like 'john lasseter' )  
+                                                                        or  (SELECT * FROM movies where director = 'John Lasseter')    
+3.Find all the movies (and director) not directed by John Lasseter      ( select * from movies where director not like 'john lasseter' )
+                                                                        or  (select * from movies where director != "John Lasseter" )
+4.Find all the WALL-* movies                                            ( select * from movies where title like "wall-%" )
+
+
+Exercise 4 — Tasks
+
+1.List all directors of Pixar movies(alphabetically),without duplicates  ( select distinct director from movies order by director asc; ) //distinct removes duplicates
+2.List the last four Pixar movies released (ordered from most            ( select * from movies order by year desc limit 4; )
+recent to least)
+3.List the first five Pixar movies sorted alphabetically                 ( select title from movies order by title asc limit 5; )
+4.List the next five Pixar movies sorted alphabetically                  ( select title from movies order by title asc limit 5 offset 5 )
+
+
+Review 1 — Tasks
+
+1.List all the Canadian cities and their populations                     ( SELECT city,population FROM north_american_cities where country like "canada"; )
+2.Order all the cities in the United States by their                     ( select city,latitude from north_american_cities
+where 
+    latitude from north to south                                          country = "United States"
+order by latitude desc; )
+                             
+3.List all the cities west of Chicago, ordered from west to east         ( select city, longitude from north_american_cities
+where longitude < -87.629798
+ 
+                                                                          order by longitude ASC; ) 
+4.List the two largest cities in Mexico (by population)                  ( select city ,population from north_american_cities where country like "mexico"
+                                                                           order by population desc limit 2 )
+5.List the third and fourth largest cities (by population)               ( select city, population from north_american_cities
+where country LIKE "United States"
+
+  in the United States and their population                                 order by population desc
+ limit 2 offset 2; )
+
+
+Exercise 6 — Tasks
+
+1.Find the domestic and international sales for each movie               ( Select title, domestic_sales, international_sales 
+from movies
+ 
+                                                                             join boxoffice
+ on movies.id = boxoffice.movie_id; )
+2.Show the sales numbers for each movie that did better                  ( select title, domestic_sales, international_sales from movies  join boxoffice 
+internationally rather than domestically                                    on movies.id = boxoffice.movie_id WHERE international_sales > domestic_sales; )
+3.List all the movies by their ratings in descending order               ( select title, rating from movies join boxoffice  on movies.id = boxoffice.movie_id
+                                                                             order by rating DESC; )
+
+Exercise 7 — Tasks
+
+1.Find the list of all buildings that have employees                     ( SELECT DISTINCT building FROM employees; )
+2.Find the list of all buildings and their capacity                      ( select * from buildings; )
+3.List all buildings and the distinct employee roles                     ( select distinct building_name, role from buildings 
+left join employees
+in each building (including empty buildings)                                 on building_name = building;)
+
+Exercise 8 — Tasks
+
+1.Find the name and role of all employees who have not been              ( select name, role from employees
+where building is null; )
+ assigned to a building
+2.Find the names of the buildings that hold no employees                 (select DISTINCT building_name from buildings left join employees on building_name = building
+                                                                              where building IS NULL;)
+
+Exercise 9 — Tasks
+
+1.List all movies and their combined sales in millions of dollars       ( select title, (domestic_sales + international_sales) / 1000000 AS millions from movies
+                                                                          join boxoffice
+ on movies.id = boxoffice.movie_id;)
+2.List all movies and their ratings in percent                          (select title, rating * 10 AS rating_percent 
+from movies join boxoffice
+ 
+                                                                           on movies.id = boxoffice.movie_id;  )
+3.List all movies that were released on even number years               ( select title, year
+from movies
+where year % 2 = 0; )
+
+Exercise 10 — Tasks
+
+1.Find the longest time that an employee has been at the studio        ( select max(years_employed) as Max_years_employed
+from employees; )
+2.For each role, find the average number of years employed by          ( select role, avg(years_employed) as Average_years_employ 
+employees in that role                                                      from employees
+group by role;)
+3.Find the total number of employee years worked in each building      ( select building, sum(years_employed) as Totalemployes from employees group by building; )
+
+Exercise 11 — Tasks
+
+1.Find the number of Artists in the studio (without a HAVING clause)   (select role, count(*) as artists
+from employees
+where role = "Artist"; )
+2.Find the number of Employees of each role in the studio              ( selecy role, count(*)
+from employees
+group by role; )
+3.Find the total number of years employed by all Engineersn            ( select role, sum(years_employed)
+from employees group by role
+having role = "Engineer"; )
+
+
+Exercise 12 — Tasks
+
+1.Find the number of movies each director has directed                 ( select director, count(id) as movies_directed
+from movies
+group by director; )
+2.Find the total domestic and international sales that                 ( select director, sum(domestic_sales + international_sales) as all_movies from movies
+ join 
+can be attributed to each director                                      boxoffice on movies.id = boxoffice.movie_id
+group by director; )
+
+Exercise 13 — Tasks
+
+1.Add the studio's new production, Toy Story 4 to the                  ( insert into movies VALUES (4, "Toy Story 4", "jhon", 2021, 90);
+list of movies (you can use any director)
+2.Toy Story 4 has been released to critical acclaim!                    ( insert into boxoffice VALUES (4, 8.7, 340000000, 270000000);
+ It had a rating of 8.7, and made 340 million domestically
+ and 270 million internationally. Add the record to the BoxOffice     
+
+
+Exercise 14 — Tasks
+
+1.The director for A Bug's Life is incorrect, it was                   ( update movies 
+set director = "John Lasseter"
+where id = 2; )
+actually directed by John Lasseter
+2.The year that Toy Story 2 was released is incorrect,                 ( update movies set year = "1999" where id= 3)
+it was actually released in 1999
+3.Both the title and director for Toy Story 8 is                       ( update movies set title ="Toy Story 3",director = "Lee Unkrich" where id= 11 )
+ incorrect! The title should be "Toy Story 3" and 
+it was directed by Lee Unkrich
+
+Exercise 15 — Tasks
+
+1.This database is getting too big, lets remove all movies             (  DELETE FROM movies 
+where year < 2005; )
+that were released before 2005.
+2.Andrew Stanton has also left the studio, so please                   ( DELETE FROM movies 
+where director = "Andrew Stanton"; )
+ remove all movies directed by him.
+
+
+Exercise 16 — Tasks
+Create a new table named Database with the following columns:                           [create table Database (
+    Name text,
+    
+– Name A string (text) describing the name of the database                                Version float,
+    Download_count integer
+);]
+– Version A number (floating point) of the latest version of this database
+– Download_count An integer count of the number of times this database was downloaded
+This table has no constraints.
+
+
+Exercise 17 — Tasks
+
+1.Add a column named Aspect_ratio with a FLOAT data type to store         ( alter table Movies
+  add column Aspect_ratio float DEFAULT 5.98; )
+the aspect-ratio each movie was released in.
+2.Add another column named Language with a TEXT data type to store              (alter table Movies
+  add column Language text DEFAULT "English";)
+ the language that the movie was released in. Ensure that the
+ default for this language is English       
+
+
+Exercise 18 — Tasks
+
+1.We've sadly reached the end of our lessons, lets clean up by            ( drop table movies;)
+removing the Movies table   
+2.And drop the BoxOffice table as well                                    ( drop table boxoffice )
